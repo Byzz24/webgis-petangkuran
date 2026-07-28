@@ -1,0 +1,701 @@
+/* ==============================================================
+   peta.css — Triple-Zone WebGIS Layout V2
+============================================================== */
+
+/* Layout Container */
+.map-page {
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.map-navbar {
+  height: 60px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-color);
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.back-btn:hover {
+  color: var(--primary-color);
+}
+
+.map-brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.download-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.download-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 176, 155, 0.3);
+}
+
+.map-container {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 60px);
+  overflow: hidden;
+  position: relative;
+}
+
+/* ================== LEFT SIDEBAR ================== */
+.sidebar-left {
+  width: 320px;
+  background: var(--bg-card);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  z-index: 800; /* Ensure it stays above map but below popups */
+  box-shadow: 2px 0 10px rgba(0,0,0,0.02);
+}
+
+/* Search inline */
+.search-container-inline {
+  width: 100%;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: var(--bg-color);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  transition: border-color 0.3s ease;
+}
+
+.search-box:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 176, 155, 0.1);
+}
+
+.search-box i {
+  color: var(--text-light);
+  margin-right: 0.5rem;
+}
+
+.search-box input {
+  border: none;
+  background: none;
+  outline: none;
+  width: 100%;
+  font-family: inherit;
+  color: var(--text-color);
+}
+
+.clear-btn {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: 0.2rem;
+}
+
+.clear-btn:hover {
+  color: var(--accent-color);
+}
+
+.search-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+}
+
+.search-results.active {
+  display: block;
+}
+
+.search-result-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem;
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item:hover {
+  background: var(--bg-color);
+  color: var(--primary-color);
+}
+
+/* Sidebar Scrollable Area */
+.sidebar-scrollable {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.sidebar-scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar-scrollable::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 10px;
+}
+
+/* Accordion */
+.accordion-item {
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg-card);
+}
+
+.accordion-header {
+  padding: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background: var(--bg-color);
+  transition: background 0.2s ease;
+}
+
+.accordion-header i:first-child {
+  margin-right: 0.5rem;
+  color: var(--primary-color);
+}
+
+.accordion-header .acc-icon {
+  margin-left: auto;
+  color: var(--text-light);
+  transition: transform 0.3s ease;
+}
+
+.accordion-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.accordion-item.active .acc-icon {
+  transform: rotate(180deg);
+}
+
+.accordion-content {
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.accordion-item.active .accordion-content {
+  padding: 1rem;
+  max-height: 2000px; /* arbitrary large number */
+}
+
+/* Hierarchical Checkboxes */
+.layer-manager {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.layer-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.group-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Base Checkbox Style */
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.95rem;
+  position: relative;
+  padding-left: 1.8rem;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+.checkbox-item input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 18px;
+  width: 18px;
+  background-color: transparent;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.checkbox-item:hover .checkmark {
+  border-color: var(--primary-color);
+}
+
+.checkbox-item input:checked ~ .checkmark {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-item input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Parent Layer Styling */
+.parent-layer {
+  font-weight: 600;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.parent-layer .toggle-child {
+  padding: 0.2rem 0.5rem;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.parent-layer .toggle-child:hover {
+  color: var(--primary-color);
+}
+
+/* Child Layer Container */
+.child-layers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-left: 1.5rem; /* indent */
+  margin-top: 0.25rem;
+  border-left: 1px dashed var(--border-color);
+  margin-left: 0.5rem;
+  display: none; /* hidden by default */
+}
+
+.child-layers.expanded {
+  display: flex;
+}
+
+.child-layer {
+  font-weight: 400;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+/* Basemap Radios */
+.radio-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.95rem;
+  position: relative;
+  padding-left: 1.8rem;
+  margin-bottom: 0.75rem;
+  user-select: none;
+}
+
+.radio-label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.radio-custom {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 18px;
+  width: 18px;
+  background-color: var(--bg-color);
+  border: 1px solid var(--text-light);
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.radio-label:hover .radio-custom {
+  border-color: var(--primary-color);
+}
+
+.radio-label input:checked ~ .radio-custom {
+  background-color: white;
+  border-color: var(--primary-color);
+  border-width: 5px;
+}
+
+/* ================== CENTER MAP ================== */
+.map-view {
+  flex: 1;
+  position: relative;
+  z-index: 10;
+}
+
+.leaflet-map {
+  width: 100%;
+  height: 100%;
+}
+
+/* Custom Controls for Leaflet */
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+
+.leaflet-control-zoom a {
+  background: var(--bg-card) !important;
+  color: var(--text-color) !important;
+  width: 36px !important;
+  height: 36px !important;
+  line-height: 36px !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: var(--bg-color) !important;
+  color: var(--primary-color) !important;
+}
+
+/* Map Loader */
+.map-loader {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(255,255,255,0.8);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.map-loader.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 176, 155, 0.2);
+  border-left-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Disable popup styles since we are using right sidebar */
+.leaflet-popup {
+  display: none !important; 
+}
+
+
+/* ================== RIGHT SIDEBAR ================== */
+.sidebar-right {
+  width: 360px;
+  background: var(--bg-color); /* slightly darker than white */
+  border-left: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  z-index: 800;
+  box-shadow: -2px 0 10px rgba(0,0,0,0.02);
+}
+
+.sidebar-right .sidebar-scrollable {
+  padding: 1.25rem;
+}
+
+.sidebar-divider {
+  border: 0;
+  height: 1px;
+  background: var(--border-color);
+  margin: 1.5rem 0;
+}
+
+/* Feature Info Panel (The new popup) */
+.feature-info-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.default-message {
+  text-align: center;
+  color: var(--text-light);
+  padding: 2rem 1rem;
+}
+
+.default-message i {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #cbd5e1;
+}
+
+/* Info Cards */
+.info-card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+  border: 1px solid var(--border-color);
+}
+
+.info-card-header {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 2px solid var(--bg-color);
+  padding-bottom: 0.5rem;
+}
+
+.info-item {
+  margin-bottom: 0.75rem;
+}
+
+.info-item:last-child {
+  margin-bottom: 0;
+}
+
+.info-label {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.2rem;
+}
+
+.info-value {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-color);
+}
+
+/* Info Badges */
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.status-badge.aman, .status-badge.rendah {
+  background: rgba(46, 204, 113, 0.1);
+  color: #27ae60;
+}
+
+.status-badge.sedang, .status-badge.cemar-ringan {
+  background: rgba(241, 196, 15, 0.1);
+  color: #d35400;
+}
+
+.status-badge.rawan, .status-badge.tinggi, .status-badge.cemar-sedang {
+  background: rgba(231, 76, 60, 0.1);
+  color: #c0392b;
+}
+
+/* GMap Button */
+.btn-gmaps {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #ea4335;
+  color: white;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  width: 100%;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(234, 67, 53, 0.2);
+}
+
+.btn-gmaps:hover {
+  background: #c53023;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(234, 67, 53, 0.3);
+  color: white;
+}
+
+/* Legend Styling */
+.legends-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.empty-legend {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  font-style: italic;
+  text-align: center;
+  padding: 1rem;
+}
+
+.legend-box {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+  border: 1px solid var(--border-color);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.legend-box h4 {
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-color);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text-color);
+}
+
+.legend-item:last-child {
+  margin-bottom: 0;
+}
+
+.legend-color {
+  width: 24px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+.legend-line {
+  width: 24px;
+  height: 3px;
+  flex-shrink: 0;
+}
+
+/* Specific Legenda Styles */
+.legend-line.batas-desa { background: transparent; border-top: 2px dashed #e74c3c; height:0;}
+.legend-line.batas-dusun { background: transparent; border-top: 2px dotted #34495e; height:0;}
+.legend-line.batas-rt { background: transparent; border-top: 1px solid #95a5a6; height:0;}
+
+.legend-color.banjir-aman { background: #2ecc71; opacity: 0.6; }
+.legend-color.banjir-sedang { background: #f1c40f; opacity: 0.6; }
+.legend-color.banjir-rawan { background: #e74c3c; opacity: 0.6; }
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .sidebar-right {
+    width: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .map-container {
+    flex-direction: column;
+  }
+  .sidebar-left, .sidebar-right {
+    width: 100%;
+    height: 40vh; /* split view on mobile */
+    border-right: none;
+    border-top: 1px solid var(--border-color);
+  }
+  .map-view {
+    height: 50vh;
+  }
+}

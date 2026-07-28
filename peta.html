@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Peta Interaktif — WebGIS Desa Kaibonpetangkuran</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- Ikon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <!-- Leaflet Geocoder -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+
+  <!-- Leaflet LocateControl -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/peta.css" />
+</head>
+
+<body class="map-page">
+  <!-- Peta Navbar (Simplified) -->
+  <nav class="map-navbar">
+    <a href="index.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i> <span>Kembali</span>
+    </a>
+    <div class="map-brand">
+      <i class="fas fa-globe-asia"></i>
+      <span>WebGIS Kaibonpetangkuran</span>
+    </div>
+    <!-- Tombol Unduh (Dipindah kembali ke navbar untuk kompatibilitas html2canvas) -->
+    <button id="downloadMapBtn" class="download-btn" title="Unduh Peta">
+      <i class="fas fa-download"></i> <span>Unduh Peta</span>
+    </button>
+  </nav>
+
+  <!-- Triple-Zone Layout Container -->
+  <div class="map-container">
+
+    <!-- ZONA 1: Bilah Sisi Kiri (Manajer Layer) -->
+    <aside class="sidebar-left">
+      <div class="sidebar-scrollable">
+        <!-- Accordion 1: Informasi Desa -->
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <i class="fas fa-info-circle"></i> Informasi Desa
+            <i class="fas fa-chevron-down acc-icon"></i>
+          </div>
+          <div class="accordion-content">
+            <p>Desa Kaibonpetangkuran, Kec. Ambal, Kab. Kebumen.</p>
+            <p><strong>Luas Wilayah:</strong> &plusmn; 420 Ha</p>
+            <p><strong>Dusun:</strong> Karangjiad, Karangtengah, Krajan, Selawen</p>
+          </div>
+        </div>
+
+        <!-- Accordion 2: Tampilan Peta (Basemap) -->
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <i class="fas fa-layer-group"></i> Tampilan Peta
+            <i class="fas fa-chevron-down acc-icon"></i>
+          </div>
+          <div class="accordion-content">
+            <div class="basemap-selector">
+              <label class="radio-label">
+                <input type="radio" name="basemap" value="osm" checked>
+                <span class="radio-custom"></span>
+                OpenStreetMap (Jalan)
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="basemap" value="satellite">
+                <span class="radio-custom"></span>
+                Citra Satelit (Esri)
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="basemap" value="carto">
+                <span class="radio-custom"></span>
+                Peta Terang (Carto)
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion 3: Panduan Penggunaan -->
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <i class="fas fa-book"></i> 3. Panduan Penggunaan
+            <i class="fas fa-chevron-down acc-icon"></i>
+          </div>
+          <div class="accordion-content">
+            <p style="font-size: 0.85rem; color: var(--text-light); line-height: 1.5;">
+              1. <b>Buka/Tutup Layer:</b> Centang kotak pada menu <i>Pilih Peta</i> di bawah.<br>
+              2. <b>Lihat Detail:</b> Klik objek (titik/area) pada peta untuk melihat data di panel kanan.<br>
+              3. <b>Zoom & Geser:</b> Gunakan scroll mouse atau tombol + / - di kanan bawah peta.<br>
+              4. <b>Unduh:</b> Gunakan tombol <i>Unduh Peta</i> di pojok kanan atas peta.
+            </p>
+          </div>
+        </div>
+
+        <!-- Accordion 4: Fitur Pencarian -->
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <i class="fas fa-search"></i> 4. Fitur Pencarian
+            <i class="fas fa-chevron-down acc-icon"></i>
+          </div>
+          <div class="accordion-content">
+            <div class="search-container-inline" style="position: relative;">
+              <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Cari lokasi, jalan..." autocomplete="off">
+                <button id="clearSearchBtn" class="clear-btn" style="display:none;"><i class="fas fa-times"></i></button>
+              </div>
+              <div id="searchResults" class="search-results"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Accordion 5: Peta (Layer Manager) -->
+        <div class="accordion-item active">
+          <div class="accordion-header">
+            <i class="fas fa-map"></i> 5. Pilih Peta (Layer)
+            <i class="fas fa-chevron-up acc-icon"></i>
+          </div>
+          <div class="accordion-content layer-manager" id="layerManager">
+            <!-- Layers will be generated dynamically via JS based on hierarchical logic -->
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ZONE 2: Center Map -->
+    <main class="map-view">
+      <div id="map" class="leaflet-map"></div>
+      
+      <!-- Overlay Loader -->
+      <div id="mapLoader" class="map-loader hidden">
+        <div class="spinner"></div>
+        <p>Memuat Data Peta...</p>
+      </div>
+    </main>
+
+    <!-- ZONA 3: Bilah Sisi Kanan (Legenda & Info) -->
+    <aside class="sidebar-right">
+      <div class="sidebar-scrollable">
+        
+        <!-- Info Panel (Shows when feature is clicked) -->
+        <div id="featureInfoPanel" class="feature-info-panel hidden">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Default message when nothing is clicked -->
+        <div id="defaultInfoMessage" class="default-message">
+          <i class="fas fa-hand-pointer"></i>
+          <p>Klik objek pada peta untuk melihat detail informasi.</p>
+        </div>
+
+        <hr class="sidebar-divider">
+
+        <!-- Legends Section -->
+        <div class="legends-container">
+          <h3 class="legends-title"><i class="fas fa-list-ul"></i> Keterangan Peta (Legenda)</h3>
+          
+          <div id="legendArea">
+            <p class="empty-legend">Pilih layer di panel kiri untuk memunculkan legenda.</p>
+            <!-- Legends dynamically added here -->
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Leaflet Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Geocoder -->
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  <!-- LocateControl -->
+  <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+  <!-- HTML2Canvas untuk mengunduh peta -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- SweetAlert2 for Popups -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <!-- App Scripts -->
+  <script src="js/ui-interactions.js"></script>
+  <script src="js/map-layers.js"></script>
+  <script src="js/map-init.js"></script>
+
+</body>
+</html>

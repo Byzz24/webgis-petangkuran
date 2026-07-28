@@ -1,0 +1,24 @@
+{
+"type": "FeatureCollection",
+"name": "fasum",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "Nama": "Mushola Alhamdulillah", "X": -7.7857951690748273, "Y": 109.73626418004925, "Jenis": "Tempat Ibadah" }, "geometry": { "type": "Point", "coordinates": [ 109.736264180049247, -7.785795169074827 ] } },
+{ "type": "Feature", "properties": { "Nama": "Mushola Darul Arifin", "X": -7.7873509109229886, "Y": 109.74191832596166, "Jenis": "Tempat Ibadah" }, "geometry": { "type": "Point", "coordinates": [ 109.741918325961663, -7.787350910922989 ] } },
+{ "type": "Feature", "properties": { "Nama": " TPQ Al Faiz", "X": -7.7890070865530614, "Y": 109.73586046142584, "Jenis": "Pendidikan" }, "geometry": { "type": "Point", "coordinates": [ 109.735860461425844, -7.789007086553061 ] } },
+{ "type": "Feature", "properties": { "Nama": "SD Negeri Petangkuran", "X": -7.7898266221659451, "Y": 109.73410311571044, "Jenis": "Pendidikan" }, "geometry": { "type": "Point", "coordinates": [ 109.73410311571044, -7.789826622165945 ] } },
+{ "type": "Feature", "properties": { "Nama": "Kantor Balai Desa", "X": -7.7900933029961372, "Y": 109.73414110149616, "Jenis": "Pemerintahan" }, "geometry": { "type": "Point", "coordinates": [ 109.734141101496164, -7.790093302996137 ] } },
+{ "type": "Feature", "properties": { "Nama": "Pondok Khitan & Bidan Delima", "X": -7.7912096934838377, "Y": 109.73844974041464, "Jenis": "Kesehatan" }, "geometry": { "type": "Point", "coordinates": [ 109.738449740414637, -7.791209693483838 ] } },
+{ "type": "Feature", "properties": { "Nama": "Mushola Al Ikhlas", "X": -7.7941252550593143, "Y": 109.73968897344176, "Jenis": "Tempat Ibadah" }, "geometry": { "type": "Point", "coordinates": [ 109.739688973441758, -7.794125255059314 ] } },
+{ "type": "Feature", "properties": { "Nama": "Masjid Al Falah", "X": -7.7933520746400324, "Y": 109.7413038827256, "Jenis": "Tempat Ibadah" }, "geometry": { "type": "Point", "coordinates": [ 109.741303882725603, -7.793352074640032 ] } },
+{ "type": "Feature", "properties": { "Nama": "Masjid Washilatul Huda ", "X": -7.7902682772463967, "Y": 109.73400521436292, "Jenis": "Tempat Ibadah" }, "geometry": { "type": "Point", "coordinates": [ 109.734005214362924, -7.790268277246397 ] } },
+{ "type": "Feature", "properties": { "Nama": "Lapangan Petangkuran", "X": -7.7940323890762242, "Y": 109.73512497154488, "Jenis": "Olahraga" }, "geometry": { "type": "Point", "coordinates": [ 109.735124971544877, -7.794032389076224 ] } },
+{ "type": "Feature", "properties": { "Nama": "Lapangan Pacuan Kuda Krido Turonggo", "X": -7.7932777301272731, "Y": 109.73559118130882, "Jenis": "Olahraga" }, "geometry": { "type": "Point", "coordinates": [ 109.73559118130882, -7.793277730127273 ] } },
+{ "type": "Feature", "properties": { "Nama": "Mushola AL HUDA", "X": -7.7950732957387965, "Y": 109.73406122532298, "Jenis": "Tempat Ibadah" }, "geometry": { "type": "Point", "coordinates": [ 109.734061225322975, -7.795073295738796 ] } },
+{ "type": "Feature", "properties": { "Nama": "Posyandu Semangka", "X": -7.7952359371709825, "Y": 109.73545985461476, "Jenis": "Kesehatan" }, "geometry": { "type": "Point", "coordinates": [ 109.73545985461476, -7.795235937170983 ] } },
+{ "type": "Feature", "properties": { "Nama": "Makam Keluarga P.Wirasenjaya", "X": -7.8011980923108952, "Y": 109.73785371027409, "Jenis": "Lainnya" }, "geometry": { "type": "Point", "coordinates": [ 109.737853710274095, -7.801198092310895 ] } },
+{ "type": "Feature", "properties": { "Nama": "Pantai Petangkuran", "X": -7.8080182008887293, "Y": 109.73519732779766, "Jenis": "Lainnya" }, "geometry": { "type": "Point", "coordinates": [ 109.735197327797664, -7.808018200888729 ] } },
+{ "type": "Feature", "properties": { "Nama": "Lapangan Voli Karangjiad", "X": -7.7960036552767251, "Y": 109.73643353787246, "Jenis": "Olahraga" }, "geometry": { "type": "Point", "coordinates": [ 109.736433537872458, -7.796003655276725 ] } },
+{ "type": "Feature", "properties": { "Nama": "Polindes", "X": -7.7902961275075713, "Y": 109.73406984213187, "Jenis": "Kesehatan" }, "geometry": { "type": "Point", "coordinates": [ 109.734069842131873, -7.790296127507571 ] } }
+]
+}

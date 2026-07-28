@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WebGIS Desa Kaibonpetangkuran — Peta Interaktif Potensi & Kerawanan</title>
+  <meta name="description"
+    content="Platform WebGIS interaktif untuk visualisasi profil desa, potensi wilayah, kerawanan banjir lahan pertanian, dan kualitas air tanah Desa Kaibonpetangkuran, Kecamatan Ambal, Kebumen." />
+  <meta name="keywords"
+    content="WebGIS, Desa Kaibonpetangkuran, KKN, Peta Interaktif, Kerawanan Banjir, Kualitas Air Tanah, Kebumen" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- Ikon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Gaya CSS -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav id="navbar" class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">
+        <span class="nav-icon"><i class="fas fa-globe-asia"></i></span>
+        <span class="nav-text">WebGIS <strong>Kaibonpetangkuran</strong></span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#hero" class="nav-link active">Beranda</a></li>
+        <li><a href="#about" class="nav-link">Tentang</a></li>
+        <li><a href="#features" class="nav-link">Fitur</a></li>
+        <li><a href="#team" class="nav-link">Tim</a></li>
+        <li><a href="peta.html" class="nav-link nav-cta"><i class="fas fa-map-marked-alt"></i> Buka Peta</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== HERO SECTION ===== -->
+  <section id="hero" class="hero-section">
+    <div class="hero-bg">
+      <div class="hero-gradient"></div>
+      <div class="hero-particles" id="heroParticles"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge animate-fade-up">
+        <i class="fas fa-satellite-dish"></i> KKN — Universitas Pembangunan Nasional "Veteran" Yogyakarta
+      </div>
+      <h1 class="hero-title animate-fade-up delay-1">
+        WebGIS Interaktif<br />
+        <span class="accent-gradient">Desa Kaibonpetangkuran</span>
+      </h1>
+      <p class="hero-subtitle animate-fade-up delay-2">
+        Platform pemetaan digital untuk visualisasi <strong>Profil Desa</strong>, <strong>Wilayah</strong>,
+        <strong>Kerawanan Banjir Lahan Pertanian</strong>, dan <strong>Kualitas Air Tanah</strong>
+        di Kecamatan Ambal, Kabupaten Kebumen.
+      </p>
+      <div class="hero-buttons animate-fade-up delay-3">
+        <a href="peta.html" class="btn btn-primary btn-glow">
+          <i class="fas fa-map-marked-alt"></i> Jelajahi Peta
+        </a>
+        <a href="#about" class="btn btn-outline-light">
+          <i class="fas fa-info-circle"></i> Tentang Proyek
+        </a>
+      </div>
+
+      <!-- Bilah Statistik (Dipindah ke atas Petunjuk Gulir) -->
+      <div class="stats-bar animate-fade-up delay-3">
+        <div class="stat-item">
+          <span class="stat-num" data-count="4">0</span>
+          <span class="stat-label">Dusun</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num" data-count="3">0</span>
+          <span class="stat-label">RW</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num" data-count="9">0</span>
+          <span class="stat-label">RT</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num" data-count="15">0</span>
+          <span class="stat-label">Peta</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num" data-count="60">0</span>
+          <span class="stat-label">Titik Sampel Air</span>
+        </div>
+      </div>
+
+      <div class="hero-scroll-hint animate-fade-up delay-4">
+        <span>Scroll ke bawah</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT SECTION ===== -->
+  <section id="about" class="about-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge"><i class="fas fa-leaf"></i> Latar Belakang</span>
+        <h2 class="section-title">Mengenal<br /><span class="accent">Desa Kaibonpetangkuran</span></h2>
+        <p class="section-subtitle">Pesisir dan tantangan lingkungan dalam satu visualisasi spasial</p>
+      </div>
+
+      <div class="about-content"
+        style="max-width: 900px; margin: 0 auto; background: var(--bg-card); padding: 3rem; border-radius: var(--radius-lg); border: 1px solid var(--border-subtle); backdrop-filter: blur(8px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); line-height: 1.8; color: var(--text-secondary); text-align: justify; font-size: 1.05rem;">
+        <p style="margin-bottom: 1.5rem;">
+          <strong style="color: var(--text-primary);">Desa Kaibonpetangkuran</strong>, yang terletak di Kecamatan Ambal,
+          Kabupaten Kebumen, merupakan wilayah pesisir yang kaya akan potensi pertanian dan sumber daya alam. Desa ini
+          terdiri dari empat dusun utama: Karangjiad, Karangtengah, Krajan, dan Selawen. Dengan topografi yang unik,
+          wilayah ini tidak hanya menyimpan peluang besar, tetapi juga menghadapi sejumlah tantangan lingkungan yang
+          perlu dikelola dengan baik.
+        </p>
+        <p>
+          Kedekatan geografis desa dengan wilayah pesisir dan elevasi tanah yang relatif rendah menjadikan sebagian
+          lahan pertanian sangat rentan terhadap <strong style="color: var(--accent-warn);">ancaman banjir</strong>.
+          Untuk memetakan zonasi kerawanan secara detail, kami menggunakan analisis spasial multi-parameter yang
+          mengintegrasikan data elevasi, kemiringan lereng, curah hujan, hingga pengaruh pasang surut air laut. Lebih
+          dari itu, keseimbangan lingkungan desa juga sangat bergantung pada <strong
+            style="color: var(--accent-primary);">kualitas air tanah</strong> yang dikonsumsi oleh masyarakat. Melalui
+          survei pada 60 titik sampel air, kami melakukan pengukuran parameter krusial seperti tingkat keasaman (pH),
+          Total Dissolved Solids (TDS), Daya Hantar Listrik (DHL), dan kedalaman muka air tanah (MAT). Integrasi data
+          profil desa, potensi wilayah, kerawanan banjir lahan pertanian, dan kualitas air tanah ini kemudian
+          divisualisasikan dalam satu platform WebGIS komprehensif, guna mendukung pengambilan keputusan yang presisi
+          bagi pembangunan dan pelestarian Desa Kaibonpetangkuran.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FEATURES SECTION ===== -->
+  <section id="features" class="features-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge"><i class="fas fa-layer-group"></i> Fitur</span>
+        <h2 class="section-title">Apa yang Bisa<br /><span class="accent">Kamu Lakukan?</span></h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feat-icon"><i class="fas fa-map-marked-alt"></i></div>
+          <h3>Peta Interaktif</h3>
+          <p>Eksplorasi peta desa secara interaktif dengan zoom, pan, dan klik untuk informasi detail pada setiap objek
+            spasial.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feat-icon"><i class="fas fa-layer-group"></i></div>
+          <h3>Sistem Layer Dinamis</h3>
+          <p>Nyalakan/matikan layer data secara bebas dari panel kontrol hierarkis di sebelah kiri.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feat-icon"><i class="fas fa-satellite"></i></div>
+          <h3>Basemap Ganda</h3>
+          <p>Beralih antara peta OpenStreetMap dan citra satelit Esri untuk melihat kondisi topografi nyata.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feat-icon"><i class="fas fa-info-circle"></i></div>
+          <h3>Panel Informasi Lengkap</h3>
+          <p>Klik setiap fitur di peta untuk menampilkan atribut data dalam panel sisi kanan yang estetis dan
+            terstruktur.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feat-icon"><i class="fas fa-th-list"></i></div>
+          <h3>Legenda Berkelompok</h3>
+          <p>Legenda peta tersusun secara rapi berdasarkan kelompok analisis peta, memudahkan pembacaan data spasial.
+          </p>
+        </div>
+        <div class="feature-card">
+          <div class="feat-icon"><i class="fas fa-download"></i></div>
+          <h3>Unduh Peta</h3>
+          <p>Simpan tampilan peta yang sedang aktif menjadi file gambar beresolusi tinggi dengan satu klik.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TEAM SECTION ===== -->
+  <section id="team" class="team-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge"><i class="fas fa-users"></i> Tim</span>
+        <h2 class="section-title">Dibuat Oleh<br /><span class="accent">Kelompok KKN UPNYK 84.411</span></h2>
+        <p class="section-subtitle">Universitas Pembangunan Nasional "Veteran" Yogyakarta</p>
+      </div>
+
+      <h3 style="text-align: center; margin-bottom: 2rem; color: var(--text-color);">Pembuat WebGIS</h3>
+      <div class="team-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); margin-bottom: 4rem;">
+        <div class="team-card">
+          <div class="team-avatar" style="background: linear-gradient(135deg, #FF6B6B, #FF8E53);">AM</div>
+          <span class="team-name">Amelia Pitra S.B.S</span>
+          <span class="team-role">Peta Profil, Potensi & Kerawanan Banjir</span>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar" style="background: linear-gradient(135deg, #00b09b, #96c93d);">KS</div>
+          <span class="team-name">Kurnia Sandy Assidiq</span>
+          <span class="team-role">Peta Kualitas Air Tanah</span>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">BJ</div>
+          <span class="team-name">Bayu Java Trenggana</span>
+          <span class="team-role">Full-Stack WebGIS Developer</span>
+        </div>
+      </div>
+
+      <h3 style="text-align: center; margin-bottom: 2rem; color: var(--text-color);">Anggota Kelompok KKN:</h3>
+      <div class="team-grid"
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto;">
+        <div class="team-card"
+          style="padding: 1.5rem; text-align: left; display: flex; align-items: center; justify-content: center;">
+          <span class="team-name" style="font-size: 1.1rem; margin-bottom: 0;">Ari Raharja (Teknik Pertambangan)</span>
+        </div>
+        <div class="team-card"
+          style="padding: 1.5rem; text-align: left; display: flex; align-items: center; justify-content: center;">
+          <span class="team-name" style="font-size: 1.1rem; margin-bottom: 0;">Amelia Pitra S B S (Teknik
+            Geomatika)</span>
+        </div>
+        <div class="team-card"
+          style="padding: 1.5rem; text-align: left; display: flex; align-items: center; justify-content: center;">
+          <span class="team-name" style="font-size: 1.1rem; margin-bottom: 0;">Dava Ranostra Putra (Teknik
+            Perminyakan)</span>
+        </div>
+        <div class="team-card"
+          style="padding: 1.5rem; text-align: left; display: flex; align-items: center; justify-content: center;">
+          <span class="team-name" style="font-size: 1.1rem; margin-bottom: 0;">Kurnia Sandy Assidiq (Teknik
+            Lingkungan)</span>
+        </div>
+        <div class="team-card"
+          style="padding: 1.5rem; text-align: left; display: flex; align-items: center; justify-content: center;">
+          <span class="team-name" style="font-size: 1.1rem; margin-bottom: 0;">Bayu Java Trenggana (Teknik
+            Informatika)</span>
+        </div>
+        <div class="team-card"
+          style="padding: 1.5rem; text-align: left; display: flex; align-items: center; justify-content: center;">
+          <span class="team-name" style="font-size: 1.1rem; margin-bottom: 0;">Wiji Kurniawati (Agroteknologi)</span>
+        </div>
+        <div class="team-card"
+          style="padding: 1.5rem; text-align: left; display: flex; align-items: center; justify-content: center;">
+          <span class="team-name" style="font-size: 1.1rem; margin-bottom: 0;">Ahmad Dhulqornain (Agribisnis)</span>
+        </div>
+        <div class="team-card"
+          style="padding: 1.5rem; text-align: left; display: flex; align-items: center; justify-content: center;">
+          <span class="team-name" style="font-size: 1.1rem; margin-bottom: 0;">Veronika Dipadiani (Manajemen)</span>
+        </div>
+        <div class="team-card"
+          style="padding: 1.5rem; text-align: left; display: flex; align-items: center; justify-content: center;">
+          <span class="team-name" style="font-size: 1.1rem; margin-bottom: 0;">Nabila Febriana Hapsari
+            (Akuntansi)</span>
+        </div>
+        <div class="team-card"
+          style="padding: 1.5rem; text-align: left; display: flex; align-items: center; justify-content: center;">
+          <span class="team-name" style="font-size: 1.1rem; margin-bottom: 0;">Silvira Choirani (Ilmu Komunikasi)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <i class="fas fa-globe-asia"></i>
+        <span>WebGIS Desa Kaibonpetangkuran</span>
+      </div>
+      <p class="footer-tagline">Platform Pemetaan Digital</p>
+      <div class="footer-links">
+        <a href="index.html">Beranda</a>
+        <a href="peta.html">Peta</a>
+        <a href="#about">Tentang</a>
+        <a href="#features">Fitur</a>
+      </div>
+      <p class="footer-copy">&copy; 2026 KKN Desa Kaibonpetangkuran</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+
+</html>
