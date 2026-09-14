@@ -345,41 +345,236 @@ window.clearInfoPanel = function() {
 };
 
 // ---------------------------------------------------------
-// DOWNLOAD MAP (HTML2Canvas)
+// DOWNLOAD MAP — PDF berdasarkan Checklist + Screenshot fallback
 // ---------------------------------------------------------
+
+// Mapping layer ID → file PDF di folder "Hasil Download/"
+const LAYER_TO_PDF = {
+    'batas_penelitian': 'Peta Batas Dusun.pdf',
+    'batas_desa': 'Peta Batas Dusun.pdf',
+    'batas_dusun': 'Peta Batas Dusun.pdf',
+    'batas_rt': 'Peta Batas RT RW.pdf',
+    'batas_rw': 'Peta Batas RT RW.pdf',
+    'zona_kerawanan': 'Peta Kerawanan Banjir Terhadap Lahan Pertanian.pdf',
+    'lahan_terdampak': 'Peta Kerawanan Banjir Terhadap Lahan Pertanian.pdf',
+    'elevasi': 'Peta Ketinggian.pdf',
+    'slope': 'Peta Kemiringan.pdf',
+    'jenis_tanah': 'Peta Jenis Tanah.pdf',
+    'curah_hujan': 'Peta Curah Hujan.pdf',
+    'pasut': 'Peta Tinggi Muka Air Laut HHWL.pdf',
+    'penggunaan_lahan': 'Peta Penggunaan Lahan.pdf',
+    'pantai_250': 'Peta Buffer Pantai Terhadap Desa.pdf',
+    'pantai_500': 'Peta Buffer Pantai Terhadap Desa.pdf',
+    'pantai_750': 'Peta Buffer Pantai Terhadap Desa.pdf',
+    'pantai_1000': 'Peta Buffer Pantai Terhadap Desa.pdf',
+    'ph_air': 'PH.pdf',
+    'tds': 'TDS.pdf',
+    'dhl': 'DHL.pdf',
+    'indeks_pencemaran': 'IP.pdf',
+    'mat_kedalaman': 'FLOWNETS.pdf',
+    'kerentanan_god': 'FLOWNETS.pdf',
+};
+
+// Layer yang hanya bisa di-screenshot (tidak ada PDF)
+const SCREENSHOT_ONLY = ['fasilitas', 'titik_sampel', 'mat_litologi', 'mat_akuifer'];
+
+// Daftar semua PDF untuk fitur "Download Semua Peta"
+const ALL_PDFS = [
+    'Peta Batas Dusun.pdf',
+    'Peta Batas RT RW.pdf',
+    'Peta Buffer Pantai Terhadap Desa.pdf',
+    'Peta Curah Hujan.pdf',
+    'Peta Jenis Tanah.pdf',
+    'Peta Kemiringan.pdf',
+    'Peta Kerawanan Banjir Terhadap Lahan Pertanian.pdf',
+    'Peta Ketinggian.pdf',
+    'Peta Penggunaan Lahan.pdf',
+    'Peta Tinggi Muka Air Laut HHWL.pdf',
+    'DHL.pdf',
+    'FLOWNETS.pdf',
+    'IP.pdf',
+    'PH.pdf',
+    'TDS.pdf'
+];
+
 function initDownloadMap() {
     const btn = document.getElementById('downloadMapBtn');
-    if (!btn) return;
+    const btnAll = document.getElementById('downloadAllBtn');
     
-    btn.addEventListener('click', () => {
-        const mapEl = document.getElementById('map');
-        if (!mapEl) return;
-        
-        // Show loader
-        const loader = document.getElementById('mapLoader');
-        if (loader) loader.classList.remove('hidden');
-        
-        // Use html2canvas
-        setTimeout(() => {
-            html2canvas(mapEl, {
-                useCORS: true, // Allow external tiles
-                allowTaint: true,
-                ignoreElements: (el) => {
-                    // Ignore Leaflet controls like zoom buttons
-                    return el.classList.contains('leaflet-control-container');
+    // ========== TOMBOL "UNDUH PETA" (berdasarkan checklist) ==========
+    if (btn) {
+        btn.addEventListener('click', () => {
+            // Ambil semua checkbox yang tercentang di layer manager
+            const checkboxes = document.querySelectorAll('.layer-manager input[type="checkbox"]:checked');
+            const checkedIds = Array.from(checkboxes).map(c => c.value);
+            
+            if (checkedIds.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Tidak Ada Layer Dipilih',
+                    text: 'Silakan centang layer pada panel kiri terlebih dahulu sebelum mengunduh peta.',
+                    confirmButtonColor: '#00b09b'
+                });
+                return;
+            }
+            
+            // Kumpulkan PDF unik dan cek apakah hanya screenshot-only
+            const pdfFiles = new Set();
+            let hasScreenshotOnly = false;
+            let hasPdfLayer = false;
+            
+            checkedIds.forEach(id => {
+                if (LAYER_TO_PDF[id]) {
+                    pdfFiles.add(LAYER_TO_PDF[id]);
+                    hasPdfLayer = true;
+                } else if (SCREENSHOT_ONLY.includes(id)) {
+                    hasScreenshotOnly = true;
                 }
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'Peta_Kaibonpetangkuran.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                
-                if (loader) loader.classList.add('hidden');
-            }).catch(err => {
-                console.error("Error generating map image:", err);
-                alert("Gagal mengunduh peta. Pastikan semua layer telah termuat.");
-                if (loader) loader.classList.add('hidden');
+                // Layer parent_only (parameter_banjir, garis_pantai, dll) di-skip otomatis
             });
-        }, 500); // Wait for rendering
+            
+            // CASE 1: Hanya layer screenshot-only yg tercentang → screenshot peta
+            if (!hasPdfLayer && hasScreenshotOnly) {
+                Swal.fire({
+                    title: 'Unduh Screenshot Peta',
+                    text: 'Layer yang dipilih tidak tersedia dalam format PDF. Peta akan diunduh sebagai gambar (screenshot).',
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="fas fa-camera"></i> Ambil Screenshot',
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#00b09b',
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        doScreenshot();
+                    }
+                });
+                return;
+            }
+            
+            // CASE 2: Ada layer PDF → download PDF yg sesuai
+            if (pdfFiles.size > 0) {
+                const pdfList = Array.from(pdfFiles);
+                
+                let listHtml = pdfList.map(f => 
+                    `<li style="text-align:left; margin: 6px 0; font-size: 0.92rem;">
+                        <i class="fas fa-file-pdf" style="color:#e74c3c; margin-right:8px;"></i>${f}
+                    </li>`
+                ).join('');
+                
+                Swal.fire({
+                    title: '<i class="fas fa-download" style="color:#00b09b; margin-right:8px;"></i> Unduh Peta',
+                    html: `
+                        <p style="margin-bottom:12px; color:#666;">Peta berikut akan diunduh berdasarkan layer yang Anda pilih:</p>
+                        <ul style="list-style:none; padding:0; margin:0;">${listHtml}</ul>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: `<i class="fas fa-download"></i> Unduh ${pdfList.length} File`,
+                    cancelButtonText: 'Batal',
+                    confirmButtonColor: '#00b09b',
+                }).then(result => {
+                    if (result.isConfirmed) {
+                        downloadPdfs(pdfList);
+                    }
+                });
+            }
+        });
+    }
+    
+    // ========== LINK "DOWNLOAD SEMUA PETA?" ==========
+    if (btnAll) {
+        btnAll.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            let listHtml = ALL_PDFS.map(f => 
+                `<li style="text-align:left; margin: 4px 0; font-size: 0.85rem;">
+                    <i class="fas fa-file-pdf" style="color:#e74c3c; margin-right:6px;"></i>${f}
+                </li>`
+            ).join('');
+            
+            Swal.fire({
+                title: '<i class="fas fa-layer-group" style="color:#00b09b; margin-right:8px;"></i> Unduh Semua Peta',
+                html: `
+                    <p style="margin-bottom:12px; color:#666;">Seluruh <strong>${ALL_PDFS.length} peta</strong> dalam format PDF akan diunduh:</p>
+                    <ul style="list-style:none; padding:0; margin:0; max-height:220px; overflow-y:auto; border:1px solid #eee; border-radius:8px; padding:8px;">${listHtml}</ul>
+                `,
+                showCancelButton: true,
+                confirmButtonText: `<i class="fas fa-download"></i> Unduh Semua (${ALL_PDFS.length} file)`,
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#00b09b',
+            }).then(result => {
+                if (result.isConfirmed) {
+                    downloadPdfs(ALL_PDFS);
+                }
+            });
+        });
+    }
+}
+
+/**
+ * Download satu atau lebih file PDF secara berurutan.
+ * Menggunakan delay antar download agar browser tidak memblokir.
+ */
+function downloadPdfs(pdfList) {
+    pdfList.forEach((pdf, index) => {
+        setTimeout(() => {
+            const link = document.createElement('a');
+            link.href = 'Hasil Download/' + encodeURIComponent(pdf);
+            link.download = pdf;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }, index * 600); // 600ms delay antar file
+    });
+    
+    Swal.fire({
+        icon: 'success',
+        title: 'Mengunduh...',
+        html: `<strong>${pdfList.length}</strong> file peta sedang diunduh.<br><small style="color:#999;">Periksa folder unduhan browser Anda.</small>`,
+        timer: 3500,
+        showConfirmButton: false,
+        timerProgressBar: true
     });
 }
+
+/**
+ * Fallback: Screenshot peta menggunakan html2canvas
+ * Digunakan untuk layer yang tidak memiliki file PDF.
+ */
+function doScreenshot() {
+    const mapEl = document.getElementById('map');
+    if (!mapEl) return;
+    
+    const loader = document.getElementById('mapLoader');
+    if (loader) loader.classList.remove('hidden');
+    
+    setTimeout(() => {
+        html2canvas(mapEl, {
+            useCORS: true,
+            allowTaint: true,
+            ignoreElements: (el) => {
+                return el.classList.contains('leaflet-control-container');
+            }
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'Peta_Kaibonpetangkuran.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            
+            if (loader) loader.classList.add('hidden');
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Screenshot Berhasil',
+                text: 'Gambar peta telah diunduh.',
+                timer: 2500,
+                showConfirmButton: false
+            });
+        }).catch(err => {
+            console.error("Error generating map image:", err);
+            Swal.fire('Gagal', 'Gagal mengunduh screenshot peta. Pastikan semua layer telah termuat.', 'error');
+            if (loader) loader.classList.add('hidden');
+        });
+    }, 500);
+}
+

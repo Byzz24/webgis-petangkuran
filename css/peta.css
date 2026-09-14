@@ -64,6 +64,27 @@
   box-shadow: 0 4px 12px rgba(0, 176, 155, 0.3);
 }
 
+.download-area {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.download-all-link {
+  color: var(--text-light, #8892a4);
+  font-size: 0.82rem;
+  font-weight: 400;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.download-all-link:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
 .map-container {
   display: flex;
   flex: 1;
