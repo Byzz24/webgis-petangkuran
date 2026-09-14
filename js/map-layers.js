@@ -182,7 +182,7 @@ const WebGisLayers = {
                             1: '#006000', 2: '#ffff00', 3: '#ff0000'
                         },
                         legendLabels: {
-                            1: 'Rendah (61 - 158 m)', 2: 'Sedang (158 - 185 m)', 3: 'Curam (185 - 241 m)'
+                            1: 'Rendah (61 - 158 m)', 2: 'Sedang (158 - 185 m)', 3: 'Tinggi (185 - 241 m)'
                         }
                     },
                     {
