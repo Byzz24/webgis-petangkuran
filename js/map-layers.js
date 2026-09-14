@@ -179,10 +179,10 @@ const WebGisLayers = {
                         style: { weight: 1, color: '#000', fillOpacity: 0.85 },
                         colorProp: 'gridcode',
                         colors: {
-                            1: '#ffff00', 2: '#ff0000', 3: '#006000'
+                            1: '#006000', 2: '#ffff00', 3: '#ff0000'
                         },
                         legendLabels: {
-                            1: 'Sedang (158 - 185 m)', 2: 'Curam (185 - 241 m)', 3: 'Landai (61 - 158 m)'
+                            1: 'Rendah (61 - 158 m)'', 2: 'Sedang (158 - 185 m)', 3: 'Curam (185 - 241 m)'
                         }
                     },
                     {
@@ -197,7 +197,7 @@ const WebGisLayers = {
                             5: '#006000', 7: '#ffff00', 9: '#ff0000'
                         },
                         legendLabels: {
-                            5: 'Datar (Skor 5)', 7: 'Agak Curam (Skor 7)', 9: 'Curam (Skor 9)'
+                            5: 'Dasar - Landai (0 - 4 m)', 7: 'Agak Landai (4 - 8 m)', 9: 'Sedang (8 - 20 m)'
                         }
                     },
                     {
